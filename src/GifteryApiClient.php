@@ -119,7 +119,7 @@ class GifteryApiClient
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_POST           => true,
 			CURLOPT_HTTPHEADER     => [
-				'User-Agent: Giftery Api Client for PHP/1.0',
+				'User-Agent: Giftery Api client for PHP/0.1.0',
 			],
 			CURLOPT_POSTFIELDS     => http_build_query($body),
 		]);
