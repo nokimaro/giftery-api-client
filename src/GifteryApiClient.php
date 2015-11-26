@@ -5,11 +5,11 @@ namespace Giftery;
 use BadMethodCallException;
 use Giftery\classes\data\OrderData;
 use Giftery\classes\data\RequestData;
+use Giftery\classes\exception\HttpException;
 use Giftery\classes\response\ApiResponse;
 use Giftery\classes\response\BalanceResponse;
 use Giftery\classes\response\MakeOrderResponse;
 use Giftery\classes\response\ProductsResponse;
-use HttpException;
 use UnexpectedValueException;
 
 /**
