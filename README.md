@@ -2,7 +2,7 @@
 
 Подключение клиента можно выполнить (при наличии) с помощью менеджера зависимостей composer или скачать в виде архива в соответствующем разделе.
 
-`composer install giftery/ali-client`
+`composer require giftery/ali-client`
 
 Процедура установки composer описана на странице https://getcomposer.org/download/
 
