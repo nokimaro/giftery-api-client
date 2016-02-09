@@ -18,6 +18,9 @@ use UnexpectedValueException;
  */
 class GifteryApiClient
 {
+	const HTTP_GET = 0;
+	const HTTP_POST = 1;
+
 	/**
 	 * @var int
 	 */
@@ -32,6 +35,11 @@ class GifteryApiClient
 	 * @var string
 	 */
 	protected $endpoint = 'https://ssl-api.giftery.ru';
+
+	/**
+	 * @var string
+	 */
+	protected $method;
 
 	/**
 	 * @var array
@@ -49,6 +57,8 @@ class GifteryApiClient
      */
 	public function __construct($client_id, $secret)
 	{
+		$this->method = self::HTTP_GET;
+
 		$this->clientId = $client_id;
 		$this->secret = $secret;
 	}
@@ -82,6 +92,28 @@ class GifteryApiClient
 	}
 
 	/**
+	 * Флаг выполнения следующих запросов к методам API посредством GET
+	 * @return $this
+	 */
+	public function get()
+	{
+		$this->method = self::HTTP_GET;
+
+		return $this;
+	}
+
+	/**
+	 * Флаг выполнения следующих запросов к методам API посредством POST
+	 * @return $this
+	 */
+	public function post()
+	{
+		$this->method = self::HTTP_POST;
+
+		return $this;
+	}
+
+	/**
 	 * @param string $cmd
 	 * @param string $responseClass
 	 * @param RequestData|null $data
@@ -112,17 +144,29 @@ class GifteryApiClient
 			'sig'  => $this->createSig($cmd, $json),
 		];
 
-		$ch = curl_init();
+		if ($this->method === self::HTTP_GET) {
+			$query = array_merge($query, $body);
+			$body = [];
+		}
 
-		curl_setopt_array($ch, [
+		$options = [
 			CURLOPT_URL            => $this->endpoint . '/?' . http_build_query($query),
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_POST           => true,
 			CURLOPT_HTTPHEADER     => [
 				'User-Agent: Giftery Api client for PHP/0.1.0',
 			],
-			CURLOPT_POSTFIELDS     => http_build_query($body),
-		]);
+		];
+
+		if ($this->method === self::HTTP_POST) {
+			$options += [
+				CURLOPT_POST       => true,
+				CURLOPT_POSTFIELDS => http_build_query($body),
+			];
+		}
+
+		$ch = curl_init();
+
+		curl_setopt_array($ch, $options);
 
 		$answer = curl_exec($ch);
 		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
