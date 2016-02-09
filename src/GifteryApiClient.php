@@ -59,7 +59,7 @@ class GifteryApiClient
 	 */
 	public function callGetBalance()
 	{
-		return $this->call('getBalance', 'BalanceResponse');
+		return $this->call('getBalance', 'Giftery\classes\response\BalanceResponse');
 	}
 
 	/**
@@ -68,7 +68,7 @@ class GifteryApiClient
 	 */
 	public function callGetProducts()
 	{
-		return $this->call('getProducts', 'ProductsResponse');
+		return $this->call('getProducts', 'Giftery\classes\response\ProductsResponse');
 	}
 
 	/**
@@ -78,7 +78,7 @@ class GifteryApiClient
 	 */
 	public function callMakeOrder(OrderData $data)
 	{
-		return $this->call('makeOrder', 'MakeOrderResponse', $data);
+		return $this->call('makeOrder', 'Giftery\classes\response\MakeOrderResponse', $data);
 	}
 
 	/**
@@ -133,7 +133,6 @@ class GifteryApiClient
 
 		if ($answer !== false) {
 			if ($http_code === 200) {
-				$responseClass = "Giftery\\classes\\response\\$responseClass";
 				return new $responseClass($answer);
 			} else {
 				throw new HttpException(sprintf('Неожиданный HTTP код ответа сервера (%d)', $http_code));
