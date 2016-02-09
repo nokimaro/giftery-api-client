@@ -21,22 +21,22 @@ class GifteryApiClient
 	/**
 	 * @var int
 	 */
-	private $clientId;
+	protected $clientId;
 
 	/**
 	 * @var string
 	 */
-	private $secret;
+	protected $secret;
 
 	/**
 	 * @var string
 	 */
-	private $endpoint = 'https://ssl-api.giftery.ru';
+	protected $endpoint = 'https://ssl-api.giftery.ru';
 
 	/**
 	 * @var array
 	 */
-	private $allowedMethods = [
+	protected $allowedMethods = [
 		'getBalance',
 		'getProducts',
 		'makeOrder',
