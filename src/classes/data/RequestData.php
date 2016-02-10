@@ -17,7 +17,7 @@ abstract class RequestData
 	public function set(array $properties)
 	{
 		foreach ($properties as $name => $value) {
-			$method = 'set' . str_replace('_', '', $name);
+			$method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $name)));
 
 			if (!method_exists($this, $method)) {
 				throw new \BadMethodCallException('Не найден метод ' . $method);
