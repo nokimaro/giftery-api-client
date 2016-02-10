@@ -42,6 +42,11 @@ class GifteryApiClient
 	protected $method;
 
 	/**
+	 * @var string
+	 */
+	protected $version;
+
+	/**
 	 * @var array
 	 */
 	protected $allowedMethods = [
@@ -149,6 +154,10 @@ class GifteryApiClient
 			$body = [];
 		}
 
+		if ($this->version !== null) {
+			$query['v'] = $this->version;
+		}
+
 		$options = [
 			CURLOPT_URL            => $this->endpoint . '/?' . http_build_query($query),
 			CURLOPT_RETURNTRANSFER => true,
@@ -202,5 +211,13 @@ class GifteryApiClient
 	public function setEndpoint($endpoint)
 	{
 		$this->endpoint = $endpoint;
+	}
+
+	/**
+	 * @param string $version
+	 */
+	public function setVersion($version)
+	{
+		$this->version = $version;
 	}
 }
