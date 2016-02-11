@@ -2,13 +2,17 @@
 
 Подключение клиента можно выполнить (при наличии) с помощью менеджера зависимостей composer или скачать в виде архива в соответствующем разделе.
 
-`composer require giftery/api-client`
+```
+composer require giftery/api-client
+```
 
 Процедура установки composer описана на странице https://getcomposer.org/download/
 
 ### Быстрый старт
 
-```php
+```
+<?php
+
 use Giftery\classes\exception\ApiException;
 use Giftery\classes\data\OrderData;
 use Giftery\GifteryApiClient;
@@ -18,10 +22,20 @@ use Giftery\GifteryApiClient;
 
 try {
     $order = new OrderData();
+
     $order->setProductId(343);
     $order->setFace(1000);
     $order->setComment('Раз-раз, проверка...');
     $order->setTestmode(true);
+
+    // Или
+
+    $order->set([
+        'product_id' => 343,
+        'face' => 1000,
+        'comment' => 'Раз-раз, проверка...',
+        'testmode' => true,
+    ]);
 
     $api = new GifteryApiClient(1, 'VeryVerySecretString');
     $response = $api->callMakeOrder($order);
@@ -47,7 +61,9 @@ try {
 
 Возвращает объект класса `BalanceResponse`, в котором предусмотрен метод `getBalance`, который вернёт текущий баланс в виде целого числа.
 
-```php
+```
+<?php
+
 try {
     $api = new GifteryApiClient(1, 'VeryVerySecretString');
     $response = $api->callGetBalance();
@@ -72,7 +88,9 @@ try {
 * `disclaimer` - правила и ограничения (строка);
 * `image_url` - ссылка на изображение бренда, добавляемое на сертификат (строка).
 
-```php
+```
+<?php
+
 try {
     $api = new GifteryApiClient(1, 'VeryVerySecretString');
     $response = $api->callGetProducts();
@@ -88,7 +106,9 @@ try {
 
 Для работы метода требуется в качестве аргумента объект класса OrderData. OrderData представляет собой набор методов, для установки параметров заказа.
 
-```php
+```
+<?php
+
 $order = new OrderData();
 $order->setProductId(342);
 $order->setFace(1000);
@@ -98,7 +118,9 @@ $order->setTestmode(true);
 
 В случае передачи в некоторые методы неверного значения выбрасывается `UnexpectedValueException`.
 
-```php
+```
+<?php
+
 try {
     $order = new OrderData();
     $order->setProductId('Строка');
@@ -107,7 +129,9 @@ try {
 }
 ```
 
-```php
+```
+<?php
+
 try {
     $order = new OrderData();
     $order->setProductId(343);
@@ -122,3 +146,16 @@ try {
     // Обработка ошибок
 }
 ```
+
+### История изменений ###
+
+`0.1.1`
+
+* Добавлен метод `setVersion()` для указания версии API (`GifteryApiBase`)
+* Добавлен метод `set()` для установки массива свойств (`RequestData`)
+* Добавлены методы `post()`/`get()` для указания метода обращения к API (`GifteryApiBase`)
+* Private свойства (`$clientId`, `$secret`, etc) имеют область видимости protected
+
+`0.1.0`
+
+* Первый релиз
