@@ -2,6 +2,7 @@
 
 namespace Giftery;
 
+use Giftery\classes\data\GetProductsData;
 use Giftery\classes\data\OrderData;
 use Giftery\classes\GifteryApiBase;
 use Giftery\classes\response\BalanceResponse;
@@ -34,11 +35,13 @@ class GifteryApiClient extends GifteryApiBase
 
 	/**
 	 * Получение списка доступных для заказа сертификатов
+	 * @param GetProductsData $data
 	 * @return ProductsResponse
+	 * @throws classes\exception\HttpException
 	 */
-	public function callGetProducts()
+	public function callGetProducts(GetProductsData $data = null)
 	{
-		return $this->call('getProducts', 'Giftery\classes\response\ProductsResponse');
+		return $this->call('getProducts', 'Giftery\classes\response\ProductsResponse', $data);
 	}
 
 	/**
