@@ -152,11 +152,11 @@ class OrderData extends RequestData
     }
 
     /**
-     * @param bool $testmode
+     * @param bool|int $testmode
      */
     public function setTestmode($testmode)
     {
-        if (!filter_var($testmode, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === null) {
+        if (filter_var($testmode, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === null) {
             throw new UnexpectedValueException("Значение testmode не является булевым значением");
         }
 
