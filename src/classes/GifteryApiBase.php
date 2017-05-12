@@ -124,7 +124,7 @@ abstract class GifteryApiBase
             CURLOPT_URL            => $this->endpoint . '/?' . http_build_query($query),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER     => [
-                'User-Agent: Giftery Api client for PHP/0.1.1',
+                'User-Agent: Giftery Api client for PHP/0.1.3',
             ],
         ];
 
