@@ -1,12 +1,15 @@
 ### Установка
 
-Подключение клиента можно выполнить (при наличии) с помощью менеджера зависимостей composer или скачать в виде архива в соответствующем разделе.
+Подключение клиента можно выполнить (при наличии) с помощью менеджера
+зависимостей composer или скачать в виде архива в соответствующем
+разделе.
 
 ```
-composer require giftery/api-client
+composer require giftery/api-client:dev-sms
 ```
 
-Процедура установки composer описана на странице https://getcomposer.org/download/
+Процедура установки composer описана на странице
+https://getcomposer.org/download/
 
 ### Быстрый старт
 
@@ -14,156 +17,73 @@ composer require giftery/api-client
 <?php
 
 use Giftery\classes\exception\ApiException;
-use Giftery\classes\data\OrderData;
+use Giftery\classes\exception\HttpException;
+use Giftery\classes\data\PushSmsData;
 use Giftery\GifteryApiClient;
 
-// Раскомментируйте следующую строку, если не используется composer
-//include_once 'loader.php';
-
 try {
-    $order = new OrderData();
+    $message = new PushSmsData();
 
-    $order->setProductId(343);
-    $order->setFace(1000);
-    $order->setComment('Раз-раз, проверка...');
-    $order->setTestmode(true);
+    $message->setTo("79001234567");
+    $message->setText("...");
 
     // Или
 
-    $order->set([
-        'product_id' => 343,
-        'face' => 1000,
-        'comment' => 'Раз-раз, проверка...',
-        'testmode' => true,
+    $message->set([
+        'to' => "79001234567",
+        'text' => "...",
     ]);
 
     $api = new GifteryApiClient(1, 'VeryVerySecretString');
-    $response = $api->callMakeOrder($order);
+    $response = $api->callPushSms($message);
     $queue_id = $response->getQueueId();
 } catch (ApiException $e) {
-    // Обработка ошибок API (например, недостаточно средств, неактивный продукт, превышен лимит и т.д.)
+    // Обработка ошибок API (например, недостаточно средств, неактивный
+    // продукт, превышен лимит и т.д.)
     $message = $e->getMessage();
     $code = $e->getCode();
     $raw_response = $e->getResponse(); // Ответ сервера для логирования
+} catch (HttpException $e) {
+    // Обработка ошибок подключения к серверу
+    $message = $e->getMessage();
 } catch (Exception $e) {
-    // Обработка ошибок подключения к серверу, ошибок валиадации параметров и прочее
+    // Обработка ошибок подключения к серверу, ошибок валиадации
+    // параметров и прочее
     $message = $e->getMessage();
 }
 ```
 
 ### Список доступных методов GifteryApiClient
 
-* callGetBalance()
-* callGetProducts()
-* callMakeOrder(OrderData $data)
+* callPushSms()
 
-### callGetBalance()
+### callPushSms()
 
-Возвращает объект класса `BalanceResponse`, в котором предусмотрен метод `getBalance`, который вернёт текущий баланс в виде целого числа.
+В случае успешного приёма сообщения к отправке вернёт объект класса
+`PushSmsResponse`. В нём доступен один метод `getQueueId`, в данном
+контексте идентификатор не несёт особого смысла. Получение `queue_id` не
+гарантирует доставку, оно означает лишь успешное помещение сообщения во
+внутренню очередь обработчика сообщений. На данном этапе у нас нет
+возможности отследить доставку.
 
-```
-<?php
+В случае сетевых ошибок будет выброшено исключение `HttpException`.
+Повторный запрос в случае сетевой ошибки при нормальной работе сети
+*должен* быть успешным.
 
-try {
-    $api = new GifteryApiClient(1, 'VeryVerySecretString');
-    $response = $api->callGetBalance();
-    echo $response->getBalance(); // 1000
-} catch (Exception $e) {
-    // Обработка ошибок
-}
-```
+В случае ошибок со стороны внешнего API будет выброшено `ApiException`.
+В данный момент здесь может быть два кода ошибки `1001` и `1502196936`.
+Первый означает ошибку валидации входящих параметров на стороне API,
+второй ошибку добавления смс в очередь внутренного обработчика. В первом
+случае без изменения параметров не имеет смысла пытаться повторять
+запрос. Во втором случае повторный запрос *может* быть успешным.
+В очень редких случаях возможно получение других кодов ошибок (например,
+код `-1`). Все их перечислять здесь нет возможности. Повторый запрос в
+случае неописанного кода ошибки *может* быть успешным. Повторять один
+запрос более двух раз, получая один код ошибки, нет смысла. В таком
+случае следует обратиться за информацией к нам.
 
-### callGetProducts()
-
-Возвращает объект класса `ProductsResponse`, в котором предусмотрен метод `getProducts`, который вернёт массив массивов сертификатов с описанием.
-Каждый сертификат описывается набором полей:
-
-* `id` - уникальный идентификатор сертификата (целое положительное число), используется при заказе;
-* `title` - название сертификата (строка);
-* `url` - ссылка на страницу с описанием сертификата (строка);
-* `brief` - краткое описание сертификата и/или бренда (строка);
-* `faces` - массив доступных для заказа номиналов сертификатов, **0** - свободный номинал в интервале от `face_min` до `face_max` включительно (массив целых неотрицательных чисел);
-* `face_min` - минимальный доступный номинал данного серфтиката (целое положительное число);
-* `face_max` - максимальный доступный номинал данного серфтиката (целое положительное число);
-* `disclaimer` - правила и ограничения (строка);
-* `image_url` - ссылка на изображение бренда, добавляемое на сертификат (строка).
-
-```
-<?php
-
-try {
-    $api = new GifteryApiClient(1, 'VeryVerySecretString');
-    $response = $api->callGetProducts();
-    print_r($response->getProducts());
-} catch (Exception $e) {
-    // Обработка ошибок
-}
-```
-
-### callMakeOrder(OrderData $data)
-
-Возвращает объект класса `MakeOrderResponse`, в котором предусмотрен метод `getQueueId`, который вернёт уникальный идентификатор в очереди заказов (целое неотрицательное число).
-
-Для работы метода требуется в качестве аргумента объект класса OrderData. OrderData представляет собой набор методов, для установки параметров заказа.
-
-```
-<?php
-
-$order = new OrderData();
-$order->setProductId(342);
-$order->setFace(1000);
-$order->setComment('Раз-раз, проверка...');
-$order->setTestmode(true);
-```
-
-В случае передачи в некоторые методы неверного значения выбрасывается `UnexpectedValueException`.
-
-```
-<?php
-
-try {
-    $order = new OrderData();
-    $order->setProductId('Строка');
-} catch (UnexpectedValueException $e) {
-    echo $e->getMessage(); // Значение product_id должно быть положительным целым числом
-}
-```
-
-```
-<?php
-
-try {
-    $order = new OrderData();
-    $order->setProductId(343);
-    $order->setFace(1000);
-    $order->setComment('Раз-раз, проверка...');
-    $order->setTestmode(true);
-
-    $api = new GifteryApiClient(1, 'VeryVerySecretString');
-    $response = $api->callMakeOrder($order);
-    $queue_id = $response->getQueueId();
-} catch (Exception $e) {
-    // Обработка ошибок
-}
-```
-
-### История изменений ###
-
-`0.1.3`
-
-* Исправление валидации параметра `testmode`
-
-`0.1.2`
-
-* Добавлено свойство `extended` при запросе `getProducts`
-
-`0.1.1`
-
-* Добавлен метод `setVersion()` для указания версии API (`GifteryApiBase`)
-* Добавлен метод `set()` для установки массива свойств (`RequestData`)
-* Добавлены методы `post()`/`get()` для указания метода обращения к API (`GifteryApiBase`)
-* Private свойства (`$clientId`, `$secret`, etc) имеют область видимости protected
-
-`0.1.0`
-
-* Первый релиз
+Прочие исключения будут сигнализировать об ошибках в передаваемых
+значениях агрументов (валидация на стороне библиотеки). В таком случае
+могут быть выброшены исключения `UnexpectedValueException` и
+`RangeException`. Случаи, в которых выбрасываются указанные исключения
+описаны в комментариях в классе `PushSmsData`

@@ -80,13 +80,13 @@ abstract class GifteryApiBase
         return $this;
     }
 
-    /**
-     * @param string $cmd
-     * @param string $responseClass
-     * @param RequestData|null $data
-     * @return ApiResponse
-     * @throws HttpException
-     */
+	/**
+	 * @param $cmd
+	 * @param $responseClass
+	 * @param \Giftery\classes\data\RequestData|null $data
+	 * @return \Giftery\classes\response\ApiResponse
+	 * @throws \Giftery\classes\exception\HttpException
+	 */
     public function call($cmd, $responseClass, RequestData $data = null)
     {
         if (!is_string($cmd)) {
