@@ -13,14 +13,14 @@ class OrderData extends RequestData
     const DATETIME_REGEXP = '/^\d{4}-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) ([01][0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/';
 
     /**
-	 * @var int
-	 */
-	private $product_id;
+     * @var int
+     */
+    private $product_id;
 
-	/**
-	 * @var int
-	 */
-	private $face;
+    /**
+     * @var int
+     */
+    private $face;
 
     /**
      * @var string
@@ -82,34 +82,34 @@ class OrderData extends RequestData
      */
     private $delivery_type;
 
-	/**
-	 * @var int
-	 */
-	private $testmode;
+    /**
+     * @var int
+     */
+    private $testmode;
 
-	/**
-	 * @param int $product_id
-	 */
-	public function setProductId($product_id)
-	{
-		if (!filter_var($product_id, FILTER_VALIDATE_INT) || $product_id <= 0) {
-			throw new UnexpectedValueException("Значение product_id должно быть положительным целым числом");
-		}
+    /**
+     * @param int $product_id
+     */
+    public function setProductId($product_id)
+    {
+        if (!filter_var($product_id, FILTER_VALIDATE_INT) || $product_id <= 0) {
+            throw new UnexpectedValueException("Значение product_id должно быть положительным целым числом");
+        }
 
-		$this->product_id = $product_id;
-	}
+        $this->product_id = $product_id;
+    }
 
-	/**
-	 * @param int $face
-	 */
-	public function setFace($face)
-	{
-		if (!filter_var($face, FILTER_VALIDATE_INT) || $face <= 0) {
-			throw new UnexpectedValueException("Значение face должно быть положительным целым числом");
-		}
+    /**
+     * @param int $face
+     */
+    public function setFace($face)
+    {
+        if (!filter_var($face, FILTER_VALIDATE_INT) || $face <= 0) {
+            throw new UnexpectedValueException("Значение face должно быть положительным целым числом");
+        }
 
-		$this->face = $face;
-	}
+        $this->face = $face;
+    }
 
     /**
      * @param string $uuid

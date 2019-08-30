@@ -15,42 +15,42 @@ use Giftery\classes\response\ProductsResponse;
  */
 class GifteryApiClient extends GifteryApiBase
 {
-	/**
-	 * @var array
-	 */
-	protected $allowedMethods = [
-		'getBalance',
-		'getProducts',
-		'makeOrder',
-	];
+    /**
+     * @var array
+     */
+    protected $allowedMethods = [
+        'getBalance',
+        'getProducts',
+        'makeOrder',
+    ];
 
-	/**
-	 * Получение текущего баланса
-	 * @return BalanceResponse
-	 */
-	public function callGetBalance()
-	{
-		return $this->call('getBalance', 'Giftery\classes\response\BalanceResponse');
-	}
+    /**
+     * Получение текущего баланса
+     * @return BalanceResponse
+     */
+    public function callGetBalance()
+    {
+        return $this->call('getBalance', 'Giftery\classes\response\BalanceResponse');
+    }
 
-	/**
-	 * Получение списка доступных для заказа сертификатов
-	 * @param GetProductsData $data
-	 * @return ProductsResponse
-	 * @throws classes\exception\HttpException
-	 */
-	public function callGetProducts(GetProductsData $data = null)
-	{
-		return $this->call('getProducts', 'Giftery\classes\response\ProductsResponse', $data);
-	}
+    /**
+     * Получение списка доступных для заказа сертификатов
+     * @param GetProductsData $data
+     * @return ProductsResponse
+     * @throws classes\exception\HttpException
+     */
+    public function callGetProducts(GetProductsData $data = null)
+    {
+        return $this->call('getProducts', 'Giftery\classes\response\ProductsResponse', $data);
+    }
 
-	/**
-	 * Создание нового заказа
-	 * @param OrderData $data
-	 * @return MakeOrderResponse
-	 */
-	public function callMakeOrder(OrderData $data)
-	{
-		return $this->call('makeOrder', 'Giftery\classes\response\MakeOrderResponse', $data);
-	}
+    /**
+     * Создание нового заказа
+     * @param OrderData $data
+     * @return MakeOrderResponse
+     */
+    public function callMakeOrder(OrderData $data)
+    {
+        return $this->call('makeOrder', 'Giftery\classes\response\MakeOrderResponse', $data);
+    }
 }

@@ -12,9 +12,9 @@ use Giftery\classes\response\ProductsResponse;
  */
 class ProductsResponseTest extends \PHPUnit_Framework_TestCase
 {
-	public function testProductsResponse()
-	{
-		$response = new ProductsResponse('{"status":"ok","data":[]}');
-		$this->assertSame([], $response->getProducts());
-	}
+    public function testProductsResponse()
+    {
+        $response = new ProductsResponse('{"status":"ok","data":[]}');
+        $this->assertSame([], $response->getProducts());
+    }
 }
