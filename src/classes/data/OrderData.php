@@ -10,7 +10,9 @@ use UnexpectedValueException;
  */
 class OrderData extends RequestData
 {
-	/**
+    const DATETIME_REGEXP = '/^\d{4}-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) ([01][0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/';
+
+    /**
 	 * @var int
 	 */
 	private $product_id;
@@ -19,6 +21,11 @@ class OrderData extends RequestData
 	 * @var int
 	 */
 	private $face;
+
+    /**
+     * @var string
+     */
+    private $uuid;
 
     /**
      * @var string
@@ -48,12 +55,32 @@ class OrderData extends RequestData
     /**
      * @var string
      */
+    private $to_phone;
+
+    /**
+     * @var string
+     */
+    private $date_send;
+
+    /**
+     * @var string
+     */
     private $text;
 
     /**
      * @var string
      */
     private $comment;
+
+    /**
+     * @var string
+     */
+    private $external_id;
+
+    /**
+     * @var string
+     */
+    private $delivery_type;
 
 	/**
 	 * @var int
@@ -83,6 +110,14 @@ class OrderData extends RequestData
 
 		$this->face = $face;
 	}
+
+    /**
+     * @param string $uuid
+     */
+    public function setUuid($uuid)
+    {
+        $this->uuid = $uuid;
+    }
 
     /**
      * @param string $code
@@ -136,6 +171,30 @@ class OrderData extends RequestData
     }
 
     /**
+     * @param string $to_phone
+     */
+    public function setToPhone($to_phone)
+    {
+        if (!preg_match("/^\d+$/", $to_phone)) {
+            throw new UnexpectedValueException("Значение to_phone должно содержать только цифры");
+        }
+
+        $this->to_phone = $to_phone;
+    }
+
+    /**
+     * @param string $date_send
+     */
+    public function setDateSend($date_send)
+    {
+        if (!preg_match(self::DATETIME_REGEXP, $date_send)) {
+            throw new UnexpectedValueException("Значение date_send должно быть в формате Y-m-d H:i:s");
+        }
+
+        $this->date_send = $date_send;
+    }
+
+    /**
      * @param string $text
      */
     public function setText($text)
@@ -149,6 +208,22 @@ class OrderData extends RequestData
     public function setComment($comment)
     {
         $this->comment = $comment;
+    }
+
+    /**
+     * @param string $external_id
+     */
+    public function setExternalId($external_id)
+    {
+        $this->external_id = $external_id;
+    }
+
+    /**
+     * @param string $delivery_type
+     */
+    public function setDeliveryType($delivery_type)
+    {
+        $this->delivery_type = $delivery_type;
     }
 
     /**
