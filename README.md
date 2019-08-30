@@ -149,6 +149,10 @@ try {
 
 ### История изменений ###
 
+`0.2`
+
+* Добавлены методы `setUuid()`, `setToPhone()`, `setDateSend()`, `setExternalId()`, `setDeliveryType()`
+
 `0.1.3`
 
 * Исправление валидации параметра `testmode`
