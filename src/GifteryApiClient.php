@@ -8,6 +8,7 @@ use Giftery\classes\GifteryApiBase;
 use Giftery\classes\response\BalanceResponse;
 use Giftery\classes\response\MakeOrderResponse;
 use Giftery\classes\response\ProductsResponse;
+use Giftery\classes\response\CategoriesResponse;
 
 /**
  * Class GifteryApiClient
@@ -22,6 +23,7 @@ class GifteryApiClient extends GifteryApiBase
         'getBalance',
         'getProducts',
         'makeOrder',
+        'getCategories',
     ];
 
     /**
@@ -52,5 +54,15 @@ class GifteryApiClient extends GifteryApiBase
     public function callMakeOrder(OrderData $data)
     {
         return $this->call('makeOrder', 'Giftery\classes\response\MakeOrderResponse', $data);
+    }
+
+    /**
+     * Получение списка категорий
+     * @return CategoriesResponse
+     * @throws classes\exception\HttpException
+     */
+    public function callGetCategories()
+    {
+        return $this->call('getCategories', 'Giftery\classes\response\CategoriesResponse');
     }
 }
