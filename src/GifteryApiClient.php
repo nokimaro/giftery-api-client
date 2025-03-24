@@ -46,7 +46,7 @@ class GifteryApiClient extends GifteryApiBase
      * @return ProductsResponse
      * @throws classes\exception\HttpException
      */
-    public function callGetProducts(GetProductsData $data = null)
+    public function callGetProducts(?GetProductsData $data = null)
     {
         return $this->call('getProducts', 'Giftery\classes\response\ProductsResponse', $data);
     }
@@ -75,7 +75,7 @@ class GifteryApiClient extends GifteryApiBase
      * Получение списка категорий
      * @return SendResponse
      */
-    public function send($method, $data = null)
+    public function send($method, ?$data = null)
     {
         return $this->call($method, 'Giftery\classes\response\SendResponse', $data);
     }
