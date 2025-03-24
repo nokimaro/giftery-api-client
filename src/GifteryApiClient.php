@@ -75,7 +75,7 @@ class GifteryApiClient extends GifteryApiBase
      * Получение списка категорий
      * @return SendResponse
      */
-    public function send($method, ?$data = null)
+    public function send($method, $data = null)
     {
         return $this->call($method, 'Giftery\classes\response\SendResponse', $data);
     }
