@@ -83,6 +83,11 @@ class OrderData extends RequestData
     private $delivery_type;
 
     /**
+     * @var string
+     */
+    private $callback;
+
+    /**
      * @var int
      */
     private $testmode;
@@ -224,6 +229,14 @@ class OrderData extends RequestData
     public function setDeliveryType($delivery_type)
     {
         $this->delivery_type = $delivery_type;
+    }
+
+    /**
+     * @param string $callback
+     */
+    public function setCallback($callback)
+    {
+        $this->callback = $callback;
     }
 
     /**

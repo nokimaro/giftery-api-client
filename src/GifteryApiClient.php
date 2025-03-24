@@ -27,6 +27,7 @@ class GifteryApiClient extends GifteryApiBase
         'getCategories',
         'getCertificate',
         'getCode',
+        'getLinks',
         'getStatus',
     ];
 
