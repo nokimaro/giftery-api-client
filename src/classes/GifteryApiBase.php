@@ -87,7 +87,7 @@ abstract class GifteryApiBase
      * @return ApiResponse
      * @throws HttpException
      */
-    public function call($cmd, $responseClass, RequestData $data = null)
+    public function call($cmd, $responseClass, ?RequestData $data = null)
     {
         if (!is_string($cmd)) {
             throw new \UnexpectedValueException("cmd не является строкой");
